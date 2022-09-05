@@ -22,7 +22,7 @@ class Rarity(models.Model):
     name = models.CharField(max_length=64)
     emoji = models.CharField(max_length=64, default='NoEmoji')
     chance = models.PositiveIntegerField()
-    
+
     def __str__(self) -> str:
         return f'{self.name}-{self.chance}'
 
@@ -39,8 +39,10 @@ class Card(models.Model):
     cardName = models.CharField(max_length=64)
     series = models.ForeignKey(AnimeSeries, on_delete=models.RESTRICT)
     rarity = models.ForeignKey(Rarity, on_delete=models.RESTRICT)
-    levels : str = models.CharField(validators=[validate_comma_separated_integer_list]
-    , default='1,4,10,25,50,100,150,200', max_length=128)
+    levels: str = models.CharField(
+        validators=[validate_comma_separated_integer_list],
+        default='1,4,10,25,50,100,150,200',
+        max_length=128)
     image1 = models.ImageField(blank=True, upload_to='cardImages/%Y-%m')
     image2 = models.ImageField(blank=True, upload_to='cardImages/%Y-%m')
     image3 = models.ImageField(blank=True, upload_to='cardImages/%Y-%m')
@@ -70,20 +72,20 @@ class Card(models.Model):
 
     def getJson(self, level) -> str:
         j = {
-            'ID' : self.cardUID,
-            'Name' : self.cardName,
-            'Anime' : self.series.name,
-            'url' : f'http://194.5.212.182:10800/{self.getImage(level)}'
+            'ID': self.cardUID,
+            'Name': self.cardName,
+            'Anime': self.series.name,
+            'url': f'http://194.5.212.182:10800/{self.getImage(level)}'
         }
         return json.dumps(j)
 
-    def getJsonWithLevel(self,level) -> str:
+    def getJsonWithLevel(self, level) -> str:
         j = {
-            'Level' : str(level),
-            'ID' : self.cardUID,
-            'Name' : self.cardName,
-            'Anime' : self.series.name,
-            'url' : f'http://194.5.212.182:10800/{self.getImage(level)}'
+            'Level': str(level),
+            'ID': self.cardUID,
+            'Name': self.cardName,
+            'Anime': self.series.name,
+            'url': f'http://194.5.212.182:10800/{self.getImage(level)}'
         }
         return json.dumps(j)
 
@@ -91,7 +93,7 @@ class Card(models.Model):
         if not self.pk:
             charset = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789'
             id = get_random_string(length=6, allowed_chars=charset)
-            while(Card.objects.filter(cardUID=id).exists()):
+            while (Card.objects.filter(cardUID=id).exists()):
                 id = get_random_string(length=6, allowed_chars=charset)
             self.cardUID = id
         return super().save(*args, **kwargs)
@@ -99,20 +101,23 @@ class Card(models.Model):
     def __str__(self) -> str:
         return f'{self.cardUID}_{self.cardName}_{self.rarity.name}'
 
+
 class Inventory(models.Model):
     user = models.ForeignKey(Player, on_delete=models.CASCADE)
     card = models.ForeignKey(Card, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)
 
     def getInfo(self) -> str:
-        card : Card = self.card
+        card: Card = self.card
         level, next = card.getcurrentlevel(self.count)
-        return f'__{card.cardUID}__ {self.card.rarity.emoji} **{card.cardName}**({self.card.series.name})--**Level{level}**-({self.count}/{next})'
+        return f'''__{card.cardUID}__ {self.card.rarity.emoji}
+        **{card.cardName}**({self.card.series.name})
+        --**Level{level}**-({self.count}/{next})'''
 
-    def getCard(self,level) -> str:
-        card : Card = self.card
+    def getCard(self, level) -> str:
+        card: Card = self.card
         current, next = card.getcurrentlevel(self.count)
-        if(level > current):
+        if (level > current):
             return 'none'
         elif level == 0:
             return card.getJsonWithLevel(current)
@@ -121,6 +126,7 @@ class Inventory(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user}({self.getInfo()})'
+
 
 class Cooldowns(models.Model):
     user = models.OneToOneField(Player, primary_key=True, on_delete=models.CASCADE)
@@ -133,29 +139,25 @@ class Cooldowns(models.Model):
     def dropRemainingTime(self) -> timedelta:
         return self.lastDrop + timedelta(0) - datetime.now(timezone.utc)
 
-        
     def epicdropRemainingTime(self) -> timedelta:
         return self.lastEpicDrop + timedelta(0) - datetime.now(timezone.utc)
 
-        
     def dailyRemainingTime(self) -> timedelta:
         return self.lastDaily + timedelta(0) - datetime.now(timezone.utc)
 
-        
     def weeklyRemainingTime(self) -> timedelta:
         return self.lastWeekly + timedelta(0) - datetime.now(timezone.utc)
 
-        
     def claimRemainingTime(self) -> timedelta:
         return self.lastClaim + timedelta(0) - datetime.now(timezone.utc)
 
     def getAllCooldowns(self) -> str:
         result = {
-            'Drop' : str(self.dropRemainingTime()),
-            'EpicDrop' : str(self.epicdropRemainingTime()),
-            'Daily' : str(self.dailyRemainingTime()),
-            'Weekly' : str(self.weeklyRemainingTime()),
-            'Claim' : str(self.claimRemainingTime())
+            'Drop': str(self.dropRemainingTime()),
+            'EpicDrop': str(self.epicdropRemainingTime()),
+            'Daily': str(self.dailyRemainingTime()),
+            'Weekly': str(self.weeklyRemainingTime()),
+            'Claim': str(self.claimRemainingTime())
         }
         return json.dumps(result)
 

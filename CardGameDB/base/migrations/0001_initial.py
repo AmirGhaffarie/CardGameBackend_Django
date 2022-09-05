@@ -28,7 +28,15 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('cardUID', models.CharField(editable=False, max_length=64, unique=True)),
                 ('cardName', models.CharField(max_length=64)),
-                ('levels', models.CharField(default='1,4,10,25,50,100,150,200', max_length=128, validators=[django.core.validators.RegexValidator(re.compile('^\\d+(?:,\\d+)*\\Z'), code='invalid', message='Enter only digits separated by commas.')])),
+                ('levels',
+                 models.CharField(
+                    default='1,4,10,25,50,100,150,200',
+                    max_length=128,
+                    validators=[django.core.validators.RegexValidator(
+                        re.compile('^\\d+(?:,\\d+)*\\Z'),
+                        code='invalid',
+                        message='Enter only digits separated by commas.')])
+                 ),
                 ('image1', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
                 ('image2', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
                 ('image3', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
@@ -57,7 +65,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Cooldowns',
             fields=[
-                ('userID', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='base.player')),
+                ('userID', models.OneToOneField(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    primary_key=True,
+                    serialize=False,
+                    to='base.player')),
                 ('lastDrop', models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0))),
                 ('lastEpicDrop', models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0))),
                 ('lastDaily', models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0))),
