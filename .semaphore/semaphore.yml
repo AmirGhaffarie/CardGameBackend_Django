@@ -10,7 +10,7 @@ blocks:
       jobs:
         - name: pip
           commands:
-            - sem-version python 3.9
+            - sem-version python 3.10
             - checkout
             - mkdir .pip_cache
             - cache restore
@@ -20,8 +20,7 @@ blocks:
     task:
       prologue:
         commands:
-          - sem-version python 3.9
-          - checkout
+          - sem-version python 3.10
           - cache restore
           - pip install --cache-dir .pip_cache -r requirements.txt
       jobs:
