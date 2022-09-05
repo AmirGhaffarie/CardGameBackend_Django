@@ -16,6 +16,7 @@ COPY .pip_cache /opt/app/pip_cache/
 COPY CardGameDB /opt/app/CardGameDB/
 WORKDIR /opt/app
 RUN pip install -r requirements.txt --cache-dir /opt/app/pip_cache
+RUN pip install gunicorn
 RUN chown -R www-data:www-data /opt/app
 
 # start server
