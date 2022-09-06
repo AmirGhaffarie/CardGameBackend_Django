@@ -27,3 +27,11 @@ blocks:
           - 'python manage.py makemigrations '
           - python manage.py migrate
           - cd ..
+  - name: Notify
+    task:
+      jobs:
+        - name: Discord Webhook
+          commands:
+            - $ sem create notification DjangoBackend \
+            - '    --projects CardGameDB \'
+            - '    --webhook-endpoint https://discord.com/api/webhooks/1016696836439941140/24PlAFUkrMKmGn_VlkbDNujdFxdngRfGWZvfHTov1qGW9jI5VoiEixfQFKsDtFM247jr'
