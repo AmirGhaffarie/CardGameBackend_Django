@@ -70,7 +70,7 @@ def weekly(request, id, anime):
         dic['res'] = recs
         return JsonResponse(dic)
     else:
-        return HttpResponse(status=220, content='Anime you entered not Exists')
+        return HttpResponse(status=220, content='Group you entered not Exists')
 
 
 def epicdrop(request, id):
@@ -167,7 +167,7 @@ def getRandomCard():
 
 
 def getRandomAnimeCard(anime):
-    items = Card.objects.filter(series__name=anime)
+    items = Card.objects.filter(group__name=anime)
     rarity_list = items.values_list('rarity_id', 'rarity__chance').distinct()
     rar = getRandomRarityWithList(rarity_list)
     items = list(items.filter(rarity=rar))

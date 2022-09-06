@@ -111,7 +111,7 @@ class Inventory(models.Model):
         card: Card = self.card
         level, next = card.getcurrentlevel(self.count)
         return f'''__{card.cardUID}__ {self.card.rarity.emoji}
-        **{card.cardName}**({self.card.series.name})
+        **{card.cardName}**({self.card.group.name})
         --**Level{level}**-({self.count}/{next})'''
 
     def getCard(self, level) -> str:
