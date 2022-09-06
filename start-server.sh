@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # start-server.sh
+python CardGameDB/manage.py makemigrations
+python CardGameDB/manage.py migrate
 if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ] ; then
     (cd CardGameDB; python manage.py createsuperuser --no-input)
 fi
