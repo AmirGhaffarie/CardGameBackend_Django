@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime, timezone
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
-from .models import AnimeSeries, Card, Cooldowns, Inventory, Player, Rarity
+from .models import GroupName, Card, Cooldowns, Inventory, Player, Rarity
 import random
 from .paginations import InventoryPaginaiton
 from .serializers import InventorySerializer
@@ -60,7 +60,7 @@ def weekly(request, id, anime):
     cd = get_object_or_404(Cooldowns, user=id)
     if cd.weeklyRemainingTime() > timedelta(0):
         return HttpResponse(status=210, content=str(cd.weeklyRemainingTime()))
-    elif AnimeSeries.objects.filter(name=anime).exists():
+    elif GroupName.objects.filter(name=anime).exists():
         cd.lastWeekly = datetime.now(timezone.utc)
         cd.save()
         recs = []

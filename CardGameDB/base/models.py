@@ -27,7 +27,7 @@ class Rarity(models.Model):
         return f'{self.name}-{self.chance}'
 
 
-class AnimeSeries(models.Model):
+class GroupName(models.Model):
     name = models.CharField(verbose_name='Anime Name', max_length=64)
 
     def __str__(self) -> str:
@@ -37,7 +37,7 @@ class AnimeSeries(models.Model):
 class Card(models.Model):
     cardUID = models.CharField(unique=True, editable=False, max_length=64)
     cardName = models.CharField(max_length=64)
-    series = models.ForeignKey(AnimeSeries, on_delete=models.RESTRICT)
+    group = models.ForeignKey(GroupName, on_delete=models.RESTRICT)
     rarity = models.ForeignKey(Rarity, on_delete=models.RESTRICT)
     levels: str = models.CharField(
         validators=[validate_comma_separated_integer_list],
@@ -74,8 +74,8 @@ class Card(models.Model):
         j = {
             'ID': self.cardUID,
             'Name': self.cardName,
-            'Anime': self.series.name,
-            'url': f'http://194.5.212.182:10800/{self.getImage(level)}'
+            'Anime': self.group.name,
+            'url': f'{self.getImage(level)}'
         }
         return json.dumps(j)
 
@@ -84,8 +84,8 @@ class Card(models.Model):
             'Level': str(level),
             'ID': self.cardUID,
             'Name': self.cardName,
-            'Anime': self.series.name,
-            'url': f'http://194.5.212.182:10800/{self.getImage(level)}'
+            'Anime': self.group.name,
+            'url': f'{self.getImage(level)}'
         }
         return json.dumps(j)
 
