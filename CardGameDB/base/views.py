@@ -9,12 +9,12 @@ from rest_framework.generics import ListAPIView
 
 
 def register(request, id):
-    if (Player.objects.filter(userID=id).exists()):
-        return HttpResponse(content='Account already exists.')
+    if Player.objects.filter(userID=id).exists():
+        return HttpResponse(content="Account already exists.")
     else:
         player = Player(userID=id)
         player.save()
-        return HttpResponse(content='Account registered successfully.')
+        return HttpResponse(content="Account registered successfully.")
 
 
 def cds(request, id):
@@ -67,10 +67,10 @@ def weekly(request, id, anime):
         dic = {}
         recs.append(getRandomAnimeCard(anime).getJson(1))
         recs.append(getRandomAnimeCard(anime).getJson(1))
-        dic['res'] = recs
+        dic["res"] = recs
         return JsonResponse(dic)
     else:
-        return HttpResponse(status=220, content='Group you entered not Exists')
+        return HttpResponse(status=220, content="Group you entered not Exists")
 
 
 def epicdrop(request, id):
@@ -85,7 +85,7 @@ def epicdrop(request, id):
         recs.append(getRandomCard().getJson(1))
         recs.append(getRandomCard().getJson(1))
         recs.append(getRandomCard().getJson(1))
-        dic['res'] = recs
+        dic["res"] = recs
         return JsonResponse(dic)
 
 
@@ -100,9 +100,9 @@ def gift_card(request, id_from, id_to, cardid, amount):
         inv_to.count += amount
         inv_from.save()
         inv_to.save()
-        return HttpResponse('Success')
+        return HttpResponse("Success")
     else:
-        return HttpResponse(status=210, content='Not enough cards')
+        return HttpResponse(status=210, content="Not enough cards")
 
 
 def check_having_cards(request, id, cardid, amount):
@@ -110,9 +110,9 @@ def check_having_cards(request, id, cardid, amount):
     card = get_object_or_404(Card, cardUID=cardid)
     inv = Inventory.objects.get_or_create(user=user, card=card)[0]
     if inv.count >= amount:
-        return HttpResponse('Success')
+        return HttpResponse("Success")
     else:
-        return HttpResponse(status=210, content='Not enough cards')
+        return HttpResponse(status=210, content="Not enough cards")
 
 
 def addcard(request, id, cardid, amount):
@@ -122,9 +122,9 @@ def addcard(request, id, cardid, amount):
     if (inv.count + amount) >= 0:
         inv.count += amount
         inv.save()
-        return HttpResponse(content='Success')
+        return HttpResponse(content="Success")
     else:
-        return HttpResponse(status=210, content='Not enough cards')
+        return HttpResponse(status=210, content="Not enough cards")
 
 
 def change_balance(request, id, amount):
@@ -132,25 +132,26 @@ def change_balance(request, id, amount):
     if (user.balance + amount) >= 0:
         user.balance += amount
         user.save()
-        return HttpResponse(content='Success')
+        return HttpResponse(content="Success")
     else:
-        return HttpResponse(status=210, content='Not enough money')
+        return HttpResponse(status=210, content="Not enough money")
 
 
 def viewcard(request, userid, cardid, level):
     user = get_object_or_404(Player, userID=userid)
     inv = get_object_or_404(Inventory, user=user, card__cardUID=cardid)
     card = inv.getCard(level)
-    if card == 'none':
-        return HttpResponse(status=210, content='The player does not have that level of the card')
+    if card == "none":
+        return HttpResponse(
+            status=210, content="The player does not have that level of the card"
+        )
     else:
         return HttpResponse(content=card)
 
 
 class InventoryView(ListAPIView):
-
     def get(self, request, id, format=None):
-        res = Inventory.objects.filter(user=id).exclude(count=0).order_by('count')
+        res = Inventory.objects.filter(user=id).exclude(count=0).order_by("count")
         paginator = InventoryPaginaiton()
         pag = paginator.paginate_queryset(res, request)
         invs = InventorySerializer(pag, many=True)
@@ -168,7 +169,7 @@ def getRandomCard():
 
 def getRandomAnimeCard(anime):
     items = Card.objects.filter(group__name=anime)
-    rarity_list = items.values_list('rarity_id', 'rarity__chance').distinct()
+    rarity_list = items.values_list("rarity_id", "rarity__chance").distinct()
     rar = getRandomRarityWithList(rarity_list)
     items = list(items.filter(rarity=rar))
     item = random.choice(items)
@@ -181,7 +182,7 @@ def getRandomRarityWithList(list):
         maxchance += rarity[1]
     rand = random.randint(0, maxchance)
     for rarity in list:
-        if (rand <= rarity[1]):
+        if rand <= rarity[1]:
             return int(rarity[0])
         else:
             rand -= rarity[1]
@@ -193,7 +194,7 @@ def getRandomRarity():
         maxchance += rarity.chance
     rand = random.randint(0, maxchance)
     for rarity in Rarity.objects.all():
-        if (rand < rarity.chance):
+        if rand < rarity.chance:
             return rarity.id
         else:
             rand -= rarity.chance
@@ -208,11 +209,11 @@ def getRandomCard2():
 
 def getRandomRarity2():
     maxchance = 0
-    for rarity in Rarity.objects.exclude(name='Common'):
+    for rarity in Rarity.objects.exclude(name="Common"):
         maxchance += rarity.chance
     rand = random.randint(0, maxchance)
     for rarity in Rarity.objects.all():
-        if (rand < rarity.chance):
+        if rand < rarity.chance:
             return rarity.id
         else:
             rand -= rarity.chance
