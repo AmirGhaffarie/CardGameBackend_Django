@@ -27,8 +27,28 @@ class Rarity(models.Model):
         return f"{self.name}-{self.chance}"
 
 
-class GroupName(models.Model):
-    name = models.CharField(verbose_name="Anime Name", max_length=64)
+class Group(models.Model):
+    name = models.CharField(verbose_name="GroupName", max_length=64)
+    short = models.CharField(verbose_name="ShortName", default="", max_length=8)
+    emoji = models.CharField(verbose_name="Emoji", default="", max_length=64)
+
+    def __str__(self) -> str:
+        return str(self.name)
+
+
+class Idol(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.RESTRICT)
+    name = models.CharField(verbose_name="IdolName", max_length=64)
+    short = models.CharField(verbose_name="ShortName", default="", max_length=8)
+
+    def __str__(self) -> str:
+        return str(self.name)
+
+
+class Era(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.RESTRICT)
+    name = models.CharField(verbose_name="EraName", max_length=64)
+    short = models.CharField(verbose_name="ShortName", default="", max_length=8)
 
     def __str__(self) -> str:
         return str(self.name)
@@ -36,14 +56,16 @@ class GroupName(models.Model):
 
 class Card(models.Model):
     cardUID = models.CharField(unique=True, editable=False, max_length=64)
-    cardName = models.CharField(max_length=64)
-    group = models.ForeignKey(GroupName, on_delete=models.RESTRICT)
-    rarity = models.ForeignKey(Rarity, on_delete=models.RESTRICT)
+    group = models.ForeignKey(Group, default=None, on_delete=models.RESTRICT)
+    idol = models.ForeignKey(Idol, default=None, on_delete=models.RESTRICT)
+    era = models.ForeignKey(Era, default=None, on_delete=models.RESTRICT)
+    rarity = models.ForeignKey(Rarity, default=None, on_delete=models.RESTRICT)
     levels: str = models.CharField(
         validators=[validate_comma_separated_integer_list],
         default="1,4,10,25,50,100,150,200",
         max_length=128,
     )
+
     image1 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
     image2 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
     image3 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
@@ -74,8 +96,9 @@ class Card(models.Model):
     def getJson(self, level) -> str:
         j = {
             "ID": self.cardUID,
-            "Name": self.cardName,
-            "Anime": self.group.name,
+            "Idol": self.idol.name,
+            "Group": self.group.name,
+            "Era": self.era.name,
             "url": f"{self.getImage(level)}",
         }
         return json.dumps(j)
@@ -84,23 +107,28 @@ class Card(models.Model):
         j = {
             "Level": str(level),
             "ID": self.cardUID,
-            "Name": self.cardName,
-            "Anime": self.group.name,
+            "Idol": self.idol.name,
+            "Group": self.group.name,
+            "Era": self.era.name,
             "url": f"{self.getImage(level)}",
         }
         return json.dumps(j)
 
     def save(self, *args, **kwargs) -> None:
         if not self.pk:
-            charset = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789"
-            id = get_random_string(length=6, allowed_chars=charset)
+            id = self.generate_id()
             while Card.objects.filter(cardUID=id).exists():
-                id = get_random_string(length=6, allowed_chars=charset)
+                id = self.generate_id()
             self.cardUID = id
         return super().save(*args, **kwargs)
 
+    def generate_id(self) -> str:
+        charset = "0123456789"
+        Rn = get_random_string(length=3, allowed_chars=charset)
+        return f"{self.group.short}{self.era.short}{self.idol.short}T{Rn}"
+
     def __str__(self) -> str:
-        return f"{self.cardUID}_{self.cardName}_{self.rarity.name}"
+        return f"{self.cardUID}_{self.group.name}_{self.idol.name}_{self.era.name}"
 
 
 class Inventory(models.Model):
@@ -111,9 +139,7 @@ class Inventory(models.Model):
     def getInfo(self) -> str:
         card: Card = self.card
         level, next = card.getcurrentlevel(self.count)
-        return f"""__{card.cardUID}__ {self.card.rarity.emoji}
-        **{card.cardName}**({self.card.group.name})
-        --**Level{level}**-({self.count}/{next})"""
+        return f"__{card.cardUID}__ {self.card.group.emoji} **{card.idol.name}**({self.card.group.name})({self.card.era.name})--**Level{level}**-({self.count}/{next})"
 
     def getCard(self, level) -> str:
         card: Card = self.card
@@ -138,7 +164,7 @@ class Cooldowns(models.Model):
     lastClaim = models.DateTimeField(default=datetime.min)
 
     def dropRemainingTime(self) -> timedelta:
-        return self.lastDrop + timedelta(0) - datetime.now(timezone.utc)
+        return self.lastDrop + timedelta(seconds=10) - datetime.now(timezone.utc)
 
     def epicdropRemainingTime(self) -> timedelta:
         return self.lastEpicDrop + timedelta(0) - datetime.now(timezone.utc)
