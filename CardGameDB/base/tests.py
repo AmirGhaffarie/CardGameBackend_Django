@@ -7,4 +7,4 @@ class Test_Rarity(TestCase):
         rar = Rarity(name="Mamad", chance=150)
         self.assertEqual(rar.name, "Mamad")
         self.assertEqual(rar.chance, 150)
-        self.assertEqual(rar.emoji, "NoEmoji")
+        self.assertEqual(rar.emoji, "")

@@ -22,7 +22,7 @@ class Rarity(models.Model):
     name = models.CharField(max_length=64)
     chance = models.PositiveIntegerField()
     emoji = models.CharField(max_length=64, blank=True, default="")
-  
+
     def __str__(self) -> str:
         return f"{self.name}-{self.chance}"
 
@@ -30,7 +30,9 @@ class Rarity(models.Model):
 class Group(models.Model):
     name = models.CharField(verbose_name="GroupName", max_length=64)
     short = models.CharField(verbose_name="ShortName", default="", max_length=8)
-    emoji = models.CharField(verbose_name="Emoji", blank=True, default="", max_length=64)
+    emoji = models.CharField(
+        verbose_name="Emoji", blank=True, default="", max_length=64
+    )
 
     def __str__(self) -> str:
         return str(self.name)
