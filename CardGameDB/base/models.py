@@ -20,9 +20,9 @@ class Player(models.Model):
 
 class Rarity(models.Model):
     name = models.CharField(max_length=64)
-    emoji = models.CharField(max_length=64, default="NoEmoji")
     chance = models.PositiveIntegerField()
-
+    emoji = models.CharField(max_length=64, blank=True, default="")
+  
     def __str__(self) -> str:
         return f"{self.name}-{self.chance}"
 
@@ -30,7 +30,7 @@ class Rarity(models.Model):
 class Group(models.Model):
     name = models.CharField(verbose_name="GroupName", max_length=64)
     short = models.CharField(verbose_name="ShortName", default="", max_length=8)
-    emoji = models.CharField(verbose_name="Emoji", default="", max_length=64)
+    emoji = models.CharField(verbose_name="Emoji", blank=True, default="", max_length=64)
 
     def __str__(self) -> str:
         return str(self.name)
@@ -167,19 +167,19 @@ class Cooldowns(models.Model):
     lastClaim = models.DateTimeField(default=datetime.min)
 
     def dropRemainingTime(self) -> timedelta:
-        return self.lastDrop + timedelta(seconds=10) - datetime.now(timezone.utc)
+        return self.lastDrop + timedelta(minutes=5) - datetime.now(timezone.utc)
 
     def epicdropRemainingTime(self) -> timedelta:
-        return self.lastEpicDrop + timedelta(0) - datetime.now(timezone.utc)
+        return self.lastEpicDrop + timedelta(minutes=20) - datetime.now(timezone.utc)
 
     def dailyRemainingTime(self) -> timedelta:
-        return self.lastDaily + timedelta(0) - datetime.now(timezone.utc)
+        return self.lastDaily + timedelta(days=1) - datetime.now(timezone.utc)
 
     def weeklyRemainingTime(self) -> timedelta:
-        return self.lastWeekly + timedelta(0) - datetime.now(timezone.utc)
+        return self.lastWeekly + timedelta(days=7) - datetime.now(timezone.utc)
 
     def claimRemainingTime(self) -> timedelta:
-        return self.lastClaim + timedelta(0) - datetime.now(timezone.utc)
+        return self.lastClaim + timedelta(minutes=5) - datetime.now(timezone.utc)
 
     def getAllCooldowns(self) -> str:
         result = {
