@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 from base.models import Player, Card, Inventory, Group, Cooldowns, Rarity, Era, Idol
+
 # Register your models here.
 
 
@@ -12,6 +13,7 @@ class CardForm(forms.ModelForm):
 
 class CardAdmin(admin.ModelAdmin):
     form = CardForm
+
 
 admin.site.register(Player)
 admin.site.register(Card, CardAdmin)
