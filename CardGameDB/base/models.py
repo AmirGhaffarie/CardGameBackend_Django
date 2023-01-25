@@ -86,7 +86,6 @@ class Card(models.Model):
     image4 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
     image5 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
 
-
     def getImage(self, level) -> str:
         return {
             1: self.image1.url if self.image1 else None,
@@ -94,7 +93,6 @@ class Card(models.Model):
             3: self.image3.url if self.image3 else None,
             4: self.image4.url if self.image4 else None,
             5: self.image5.url if self.image5 else None,
-
         }[level]
 
     def getcurrentlevel(self, count):
