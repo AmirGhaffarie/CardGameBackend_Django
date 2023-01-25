@@ -76,7 +76,7 @@ class Card(models.Model):
     rarity = models.ForeignKey(Rarity, default=None, on_delete=models.RESTRICT)
     levels: str = models.CharField(
         validators=[validate_comma_separated_integer_list],
-        default="1,4,10,25,50,100,150,200",
+        default="1,4,10,25,50",
         max_length=128,
     )
 
@@ -85,9 +85,7 @@ class Card(models.Model):
     image3 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
     image4 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
     image5 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
-    image6 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
-    image7 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
-    image8 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
+
 
     def getImage(self, level) -> str:
         return {
@@ -96,9 +94,7 @@ class Card(models.Model):
             3: self.image3.url if self.image3 else None,
             4: self.image4.url if self.image4 else None,
             5: self.image5.url if self.image5 else None,
-            6: self.image6.url if self.image6 else None,
-            7: self.image7.url if self.image7 else None,
-            8: self.image8.url if self.image8 else None,
+
         }[level]
 
     def getcurrentlevel(self, count):
