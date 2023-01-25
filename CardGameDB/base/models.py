@@ -34,6 +34,10 @@ class Group(models.Model):
         verbose_name="Emoji", blank=True, default="", max_length=64
     )
 
+    def save(self, *args, **kwargs) -> None:
+        self.short = self.short.upper()
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return str(self.name)
 
@@ -43,6 +47,10 @@ class Idol(models.Model):
     name = models.CharField(verbose_name="IdolName", max_length=64)
     short = models.CharField(verbose_name="ShortName", default="", max_length=8)
 
+    def save(self, *args, **kwargs) -> None:
+        self.short = self.short.upper()
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return str(self.name)
 
@@ -51,6 +59,10 @@ class Era(models.Model):
     group = models.ForeignKey(Group, on_delete=models.RESTRICT)
     name = models.CharField(verbose_name="EraName", max_length=64)
     short = models.CharField(verbose_name="ShortName", default="", max_length=8)
+
+    def save(self, *args, **kwargs) -> None:
+        self.short = self.short.upper()
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return str(self.name)
