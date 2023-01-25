@@ -23,6 +23,12 @@ class Rarity(models.Model):
     chance = models.PositiveIntegerField()
     emoji = models.CharField(max_length=64, blank=True, default="")
 
+    levels: str = models.CharField(
+        validators=[validate_comma_separated_integer_list],
+        default="1,4,10,25,50",
+        max_length=128,
+    )
+
     def __str__(self) -> str:
         return f"{self.name}-{self.chance}"
 
@@ -74,11 +80,6 @@ class Card(models.Model):
     idol = models.ForeignKey(Idol, default=None, on_delete=models.RESTRICT)
     era = models.ForeignKey(Era, default=None, on_delete=models.RESTRICT)
     rarity = models.ForeignKey(Rarity, default=None, on_delete=models.RESTRICT)
-    levels: str = models.CharField(
-        validators=[validate_comma_separated_integer_list],
-        default="1,4,10,25,50",
-        max_length=128,
-    )
 
     image1 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
     image2 = models.ImageField(blank=True, upload_to="cardImages/%Y-%m")
@@ -96,7 +97,7 @@ class Card(models.Model):
         }[level]
 
     def getcurrentlevel(self, count):
-        levels = self.levels.split(",")
+        levels = self.rarity.levels.split(",")
         ints = [int(i) for i in levels]
         lowers = [i for i in ints if i <= count]
         return len(lowers), ints[len(lowers)] if len(lowers) < len(ints) else "max"
