@@ -13,22 +13,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="era",
             name="short",
-            field=models.CharField(
-                default="", max_length=8, verbose_name="ShortName"
-            ),
+            field=models.CharField(default="", max_length=8, verbose_name="ShortName"),
         ),
         migrations.AddField(
             model_name="group",
             name="short",
-            field=models.CharField(
-                default="", max_length=8, verbose_name="ShortName"
-            ),
+            field=models.CharField(default="", max_length=8, verbose_name="ShortName"),
         ),
         migrations.AddField(
             model_name="idol",
             name="short",
-            field=models.CharField(
-                default="", max_length=8, verbose_name="ShortName"
-            ),
+            field=models.CharField(default="", max_length=8, verbose_name="ShortName"),
         ),
     ]

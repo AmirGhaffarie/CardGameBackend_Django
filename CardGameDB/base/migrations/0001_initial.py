@@ -11,89 +11,193 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='AnimeSeries',
+            name="AnimeSeries",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('animeName', models.CharField(max_length=64, verbose_name='Anime Name')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "animeName",
+                    models.CharField(max_length=64, verbose_name="Anime Name"),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Card',
+            name="Card",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cardUID', models.CharField(editable=False, max_length=64, unique=True)),
-                ('cardName', models.CharField(max_length=64)),
-                ('levels',
-                 models.CharField(
-                    default='1,4,10,25,50,100,150,200',
-                    max_length=128,
-                    validators=[django.core.validators.RegexValidator(
-                        re.compile('^\\d+(?:,\\d+)*\\Z'),
-                        code='invalid',
-                        message='Enter only digits separated by commas.')])
-                 ),
-                ('image1', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
-                ('image2', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
-                ('image3', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
-                ('image4', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
-                ('image5', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
-                ('image6', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
-                ('image7', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
-                ('image8', models.ImageField(blank=True, upload_to='cardImages/%Y/%m/%d')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "cardUID",
+                    models.CharField(editable=False, max_length=64, unique=True),
+                ),
+                ("cardName", models.CharField(max_length=64)),
+                (
+                    "levels",
+                    models.CharField(
+                        default="1,4,10,25,50,100,150,200",
+                        max_length=128,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                re.compile("^\\d+(?:,\\d+)*\\Z"),
+                                code="invalid",
+                                message="Enter only digits separated by commas.",
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "image1",
+                    models.ImageField(blank=True, upload_to="cardImages/%Y/%m/%d"),
+                ),
+                (
+                    "image2",
+                    models.ImageField(blank=True, upload_to="cardImages/%Y/%m/%d"),
+                ),
+                (
+                    "image3",
+                    models.ImageField(blank=True, upload_to="cardImages/%Y/%m/%d"),
+                ),
+                (
+                    "image4",
+                    models.ImageField(blank=True, upload_to="cardImages/%Y/%m/%d"),
+                ),
+                (
+                    "image5",
+                    models.ImageField(blank=True, upload_to="cardImages/%Y/%m/%d"),
+                ),
+                (
+                    "image6",
+                    models.ImageField(blank=True, upload_to="cardImages/%Y/%m/%d"),
+                ),
+                (
+                    "image7",
+                    models.ImageField(blank=True, upload_to="cardImages/%Y/%m/%d"),
+                ),
+                (
+                    "image8",
+                    models.ImageField(blank=True, upload_to="cardImages/%Y/%m/%d"),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Player',
+            name="Player",
             fields=[
-                ('userID', models.IntegerField(primary_key=True, serialize=False, verbose_name='User Id')),
-                ('balance', models.IntegerField(default=0)),
+                (
+                    "userID",
+                    models.IntegerField(
+                        primary_key=True, serialize=False, verbose_name="User Id"
+                    ),
+                ),
+                ("balance", models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(
-            name='Rarity',
+            name="Rarity",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=64)),
-                ('chance', models.PositiveIntegerField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=64)),
+                ("chance", models.PositiveIntegerField()),
             ],
         ),
         migrations.CreateModel(
-            name='Cooldowns',
+            name="Cooldowns",
             fields=[
-                ('userID', models.OneToOneField(
-                    on_delete=django.db.models.deletion.CASCADE,
-                    primary_key=True,
-                    serialize=False,
-                    to='base.player')),
-                ('lastDrop', models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0))),
-                ('lastEpicDrop', models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0))),
-                ('lastDaily', models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0))),
-                ('lastWeekly', models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0))),
-                ('lastClaim', models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0))),
+                (
+                    "userID",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to="base.player",
+                    ),
+                ),
+                (
+                    "lastDrop",
+                    models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0)),
+                ),
+                (
+                    "lastEpicDrop",
+                    models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0)),
+                ),
+                (
+                    "lastDaily",
+                    models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0)),
+                ),
+                (
+                    "lastWeekly",
+                    models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0)),
+                ),
+                (
+                    "lastClaim",
+                    models.DateTimeField(default=datetime.datetime(1, 1, 1, 0, 0)),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Inventory',
+            name="Inventory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cardCount', models.PositiveIntegerField()),
-                ('cardID', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='base.card')),
-                ('userID', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='base.player')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("cardCount", models.PositiveIntegerField()),
+                (
+                    "cardID",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="base.card"
+                    ),
+                ),
+                (
+                    "userID",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="base.player"
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='card',
-            name='rarity',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, to='base.rarity'),
+            model_name="card",
+            name="rarity",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.RESTRICT, to="base.rarity"
+            ),
         ),
         migrations.AddField(
-            model_name='card',
-            name='series',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, to='base.animeseries'),
+            model_name="card",
+            name="series",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.RESTRICT, to="base.animeseries"
+            ),
         ),
     ]

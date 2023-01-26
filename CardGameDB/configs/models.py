@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class CommonEmojis(models.Model):
     name = models.CharField(verbose_name="Name", max_length=64)
     emoji = models.CharField(

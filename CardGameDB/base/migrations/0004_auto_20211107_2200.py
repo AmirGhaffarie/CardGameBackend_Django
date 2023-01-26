@@ -6,53 +6,53 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base', '0003_alter_inventory_count'),
+        ("base", "0003_alter_inventory_count"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='rarity',
-            name='emoji',
-            field=models.CharField(default='NoEmoji', max_length=64),
+            model_name="rarity",
+            name="emoji",
+            field=models.CharField(default="NoEmoji", max_length=64),
         ),
         migrations.AlterField(
-            model_name='card',
-            name='image1',
-            field=models.ImageField(blank=True, upload_to='cardImages/%Y/%m'),
+            model_name="card",
+            name="image1",
+            field=models.ImageField(blank=True, upload_to="cardImages/%Y/%m"),
         ),
         migrations.AlterField(
-            model_name='card',
-            name='image2',
-            field=models.ImageField(blank=True, upload_to='cardImages/%Y/%m'),
+            model_name="card",
+            name="image2",
+            field=models.ImageField(blank=True, upload_to="cardImages/%Y/%m"),
         ),
         migrations.AlterField(
-            model_name='card',
-            name='image3',
-            field=models.ImageField(blank=True, upload_to='cardImages/%Y/%m'),
+            model_name="card",
+            name="image3",
+            field=models.ImageField(blank=True, upload_to="cardImages/%Y/%m"),
         ),
         migrations.AlterField(
-            model_name='card',
-            name='image4',
-            field=models.ImageField(blank=True, upload_to='cardImages/%Y/%m'),
+            model_name="card",
+            name="image4",
+            field=models.ImageField(blank=True, upload_to="cardImages/%Y/%m"),
         ),
         migrations.AlterField(
-            model_name='card',
-            name='image5',
-            field=models.ImageField(blank=True, upload_to='cardImages/%Y/%m'),
+            model_name="card",
+            name="image5",
+            field=models.ImageField(blank=True, upload_to="cardImages/%Y/%m"),
         ),
         migrations.AlterField(
-            model_name='card',
-            name='image6',
-            field=models.ImageField(blank=True, upload_to='cardImages/%Y/%m'),
+            model_name="card",
+            name="image6",
+            field=models.ImageField(blank=True, upload_to="cardImages/%Y/%m"),
         ),
         migrations.AlterField(
-            model_name='card',
-            name='image7',
-            field=models.ImageField(blank=True, upload_to='cardImages/%Y/%m'),
+            model_name="card",
+            name="image7",
+            field=models.ImageField(blank=True, upload_to="cardImages/%Y/%m"),
         ),
         migrations.AlterField(
-            model_name='card',
-            name='image8',
-            field=models.ImageField(blank=True, upload_to='cardImages/%Y/%m'),
+            model_name="card",
+            name="image8",
+            field=models.ImageField(blank=True, upload_to="cardImages/%Y/%m"),
         ),
     ]
