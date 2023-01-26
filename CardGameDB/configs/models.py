@@ -4,7 +4,7 @@ from django.db import models
 
 
 class CommonEmojis(models.Model):
-    name = models.CharField(verbose_name="Name", max_length=64)
+    name = models.CharField(verbose_name="Name", unique=True, max_length=64)
     emoji = models.CharField(
         verbose_name="Emoji", blank=True, default="", max_length=64
     )
