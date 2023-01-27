@@ -30,7 +30,7 @@ DEBUG = True
 
 CONN_MAX_AGE = None
 
-CSRF_TRUSTED_ORIGINS = ["http://146.70.88.124:8020", "http://146.70.88.124:8010"]
+CSRF_TRUSTED_ORIGINS = ["http://django_db:8020" ,"http://146.70.88.124:8020", "http://146.70.88.124:8010"]
 
 ALLOWED_HOSTS = ["*"]
 
