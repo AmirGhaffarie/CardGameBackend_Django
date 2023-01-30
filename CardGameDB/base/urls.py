@@ -9,7 +9,7 @@ urlpatterns = [
     path("claim/<int:id>", views.claim, name="Claim"),
     path("drop/<int:id>", views.drop, name="Drop"),
     path("daily/<int:id>", views.daily, name="Daily"),
-    path("weekly/<int:id>/<anime>", views.weekly, name="Weekly"),
+    path("weekly/<int:id>/<path:anime>", views.weekly, name="Weekly"),
     path("epicdrop/<int:id>", views.epicdrop, name="EpicDrop"),
     path("addcard/<int:id>/<cardid>/<signedint:amount>", views.addcard, name="AddCard"),
     path(

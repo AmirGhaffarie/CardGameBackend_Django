@@ -65,8 +65,8 @@ def weekly(request, id, anime):
         cd.save()
         recs = []
         dic = {}
-        recs.append(getRandomAnimeCard(anime).getJson(1))
-        recs.append(getRandomAnimeCard(anime).getJson(1))
+        recs.append(getRandomGroupCard(anime).getJson(1))
+        recs.append(getRandomGroupCard(anime).getJson(1))
         dic["res"] = recs
         return JsonResponse(dic)
     else:
@@ -167,7 +167,7 @@ def getRandomCard():
     return item
 
 
-def getRandomAnimeCard(anime):
+def getRandomGroupCard(anime):
     items = Card.objects.filter(group__name=anime)
     rarity_list = items.values_list("rarity_id", "rarity__chance").distinct()
     rar = getRandomRarityWithList(rarity_list)
