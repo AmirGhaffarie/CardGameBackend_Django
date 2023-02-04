@@ -150,7 +150,9 @@ class Inventory(models.Model):
         level, next = card.getcurrentlevel(self.count)
         part1 = f"{card.rarity.emoji} {card.cardUID}"
         part2 = f" {card.group.emoji} — **{card.group.name}**"
-        part3 = f" {card.idol.name} [{card.era.name}]"
+        part3 = (
+            f" {card.idol.name} [{card.era.name}] **LV{level}**({self.count}/{next})"
+        )
         return part1 + part2 + part3
 
     def getCard(self, level) -> str:
@@ -192,8 +194,8 @@ class Cooldowns(models.Model):
 
     def getAllCooldowns(self) -> str:
         result = {
-            "Drop": str(self.dropRemainingTime()),
-            "EpicDrop": str(self.epicdropRemainingTime()),
+            "Gacha": str(self.dropRemainingTime()),
+            "Lucky": str(self.epicdropRemainingTime()),
             "Daily": str(self.dailyRemainingTime()),
             "Weekly": str(self.weeklyRemainingTime()),
             "Claim": str(self.claimRemainingTime()),
