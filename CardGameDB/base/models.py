@@ -148,9 +148,9 @@ class Inventory(models.Model):
     def getInfo(self) -> str:
         card: Card = self.card
         level, next = card.getcurrentlevel(self.count)
-        part1 = f"__{card.cardUID}__ {self.card.group.emoji}"
-        part2 = f"**{card.idol.name}**({self.card.group.name})"
-        part3 = f"({self.card.era.name})--**Level{level}**-({self.count}/{next})"
+        part1 = f"{card.rarity.emoji} {card.cardUID}"
+        part2 = f" {card.group.emoji} — **{card.group.name}**"
+        part3 = f" {card.idol.name} [{card.era.name}]"
         return part1 + part2 + part3
 
     def getCard(self, level) -> str:
