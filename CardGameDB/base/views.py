@@ -148,12 +148,12 @@ def fuse(request, userid, main_card, feed_card):
     main.xp += xp
     main.save()    
     feed.delete()
-    
+
     return HttpResponse(xp)
 
 class InventoryView(ListAPIView):
     def get(self, request, id, format=None):
-        res = Inventory.objects.filter(user=id).exclude(count=0).order_by("count")
+        res = Inventory.objects.filter(user=id).order_by("xp")
         paginator = InventoryPaginaiton()
         pag = paginator.paginate_queryset(res, request)
         invs = InventorySerializer(pag, many=True)
