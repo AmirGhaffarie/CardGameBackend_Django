@@ -7,4 +7,4 @@ class InventorySerializer(ModelSerializer):
         model = Inventory
 
     def to_representation(self, instance):
-        return instance.getInfo()
+        return instance.get_info()
