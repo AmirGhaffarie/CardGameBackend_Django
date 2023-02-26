@@ -5,11 +5,12 @@ from datetime import timedelta, datetime, timezone
 from CardGameTestDB.game_configs import *
 import json
 import configs.models as config_models
+from sorl.thumbnail import get_thumbnail
 
 
 class Player(models.Model):
     userID = models.IntegerField(verbose_name="User Id", primary_key=True)
-    balance = models.IntegerField(default=0)
+    carrots = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs) -> None:
         super().save(*args, **kwargs)
@@ -124,20 +125,39 @@ class Card(models.Model):
     def get_random_from_group(group):
         return random.choice(Card.objects.filter(group__name=group))
 
-    def getImage(self, level) -> str:
+    def get_image(self, level, geometry) -> str:
+        file = {
+            1: self.image1.file if self.image1 else None,
+            2: self.image2.file if self.image2 else None,
+            3: self.image3.file if self.image3 else None,
+        }[level]
+        return get_thumbnail(file, geometry, format="PNG").url
+
+    def get_org_image(self, level) -> str:
         return {
             1: self.image1.url if self.image1 else None,
             2: self.image2.url if self.image2 else None,
             3: self.image3.url if self.image3 else None,
         }[level]
 
-    def get_json(self, level) -> str:
+    def get_json(self, level, geometry) -> str:
         j = {
             "ID": self.cardUID,
             "Idol": self.idol.name,
             "Group": self.group.name,
             "Era": self.era.name,
-            "url": f"{self.getImage(level)}",
+            "url": self.get_image(level, geometry),
+            "rarity_id": level,
+        }
+        return json.dumps(j)
+
+    def get_org_json(self, level) -> str:
+        j = {
+            "ID": self.cardUID,
+            "Idol": self.idol.name,
+            "Group": self.group.name,
+            "Era": self.era.name,
+            "url": self.get_org_image(level),
             "rarity_id": level,
         }
         return json.dumps(j)
@@ -177,14 +197,14 @@ class Inventory(models.Model):
 
     def get_card(self) -> str:
         rarity = Rarity.get_from_xp(self.xp)
-        return self.card.get_json(rarity.get_index())
+        return self.card.get_org_json(rarity.get_index())
 
     def __str__(self) -> str:
         return f"{self.user}({self.cardUID})"
 
     def generate_id(self):
         self.card.current_index += 1
-        self.card.save() 
+        self.card.save()
         return self.card.cardUID + str(self.card.current_index)
 
     def save(self, *args, **kwargs) -> None:

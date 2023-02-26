@@ -24,7 +24,7 @@ def cds(request, id):
 
 def balance(request, id):
     player = get_object_or_404(Player, userID=id)
-    return HttpResponse(player.balance)
+    return HttpResponse(player.carrots)
 
 
 def claim(request, id):
@@ -42,7 +42,7 @@ def drop(request, id):
     else:
         cd.lastDrop = datetime.now(timezone.utc)
         cd.save()
-        return HttpResponse(get_random_card())
+        return HttpResponse(get_random_card("900"))
 
 
 def daily(request, id):
@@ -53,7 +53,7 @@ def daily(request, id):
     else:
         cd.lastDaily = datetime.now(timezone.utc)
         cd.save()
-        return HttpResponse(get_random_card())
+        return HttpResponse(get_random_card("300"))
 
 
 def weekly(request, id, group):
@@ -66,8 +66,8 @@ def weekly(request, id, group):
         cd.save()
         recs = []
         dic = {}
-        for i in range(0,2):
-            recs.append(get_random_group_card(group))
+        for i in range(0, 2):
+            recs.append(get_random_group_card(group, "300"))
         dic["res"] = recs
         return JsonResponse(dic)
     else:
@@ -84,8 +84,8 @@ def epicdrop(request, id):
         cd.save()
         recs = []
         dic = {}
-        for i in range(0,3):
-            recs.append(get_random_card())
+        for i in range(0, 3):
+            recs.append(get_random_card("300"))
         dic["res"] = recs
         return JsonResponse(dic)
 
@@ -116,8 +116,8 @@ def addcard(request, id, cardid, rarity):
 
 def change_balance(request, id, amount):
     user = get_object_or_404(Player, userID=id)
-    if (user.balance + amount) >= 0:
-        user.balance += amount
+    if (user.carrots + amount) >= 0:
+        user.carrots += amount
         user.save()
         return HttpResponse(content="Success")
     else:
@@ -129,6 +129,7 @@ def viewcard(request, userid, cardid):
     inv = get_object_or_404(Inventory, user=user, cardUID=cardid)
     card = inv.get_card()
     return HttpResponse(content=card)
+
 
 def fuse(request, userid, main_card, feed_card):
     user = get_object_or_404(Player, userID=userid)
@@ -142,14 +143,18 @@ def fuse(request, userid, main_card, feed_card):
         if main.card.era == feed.card.era:
             similarities += 1
     xp = XP_PER_SIMILARITY[similarities]
-    rarity_difference = Rarity.get_from_xp(feed.xp).get_index() - Rarity.get_from_xp(main.xp).get_index()
+    rarity_difference = (
+        Rarity.get_from_xp(feed.xp).get_index()
+        - Rarity.get_from_xp(main.xp).get_index()
+    )
     xp *= XP_MULTIPLIER[rarity_difference]
 
     main.xp += xp
-    main.save()    
+    main.save()
     feed.delete()
 
     return HttpResponse(xp)
+
 
 class InventoryView(ListAPIView):
     def get(self, request, id, format=None):
@@ -160,13 +165,15 @@ class InventoryView(ListAPIView):
         pag = paginator.get_paginated_response(invs.data)
         return pag
 
-#utils
-def get_random_card():
-    item :Card = Card.get_random()
-    rarity :Rarity = Rarity.get_random().get_index()
-    return item.get_json(rarity)
 
-def get_random_group_card(group):
-    item :Card = Card.get_random_from_group(group)
-    rarity :Rarity = Rarity.get_random().get_index()
-    return item.get_json(rarity)
+# utils
+def get_random_card(geometry):
+    item: Card = Card.get_random()
+    rarity: Rarity = Rarity.get_random().get_index()
+    return item.get_json(rarity, geometry)
+
+
+def get_random_group_card(group, geometry):
+    item: Card = Card.get_random_from_group(group)
+    rarity: Rarity = Rarity.get_random().get_index()
+    return item.get_json(rarity, geometry)
