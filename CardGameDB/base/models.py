@@ -144,7 +144,7 @@ class Card(models.Model):
         j = {
             "ID": self.cardUID,
             "CardDescription" : f"> {self.group.emoji} **{self.cardUID}** {Rarity.get_by_index(level).emoji}\n" +
-            f"> {self.era.name}✦`{self.idol.name}`",
+            f"> {self.era.name} ✦ `{self.idol.name}`",
             "url": self.get_image(level, geometry),
             "rarity_id": level,
         }
@@ -154,7 +154,7 @@ class Card(models.Model):
         j = {
             "ID": self.cardUID,
             "CardDescription" : f"> {self.group.emoji} **{self.cardUID}** {Rarity.get_by_index(level).emoji}\n" +
-            f"> {self.era.name}✦`{self.idol.name}`",
+            f"> {self.era.name} ✦ `{self.idol.name}`",
             "url": self.get_org_image(level),
             "rarity_id": level,
         }
