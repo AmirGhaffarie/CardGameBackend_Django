@@ -143,9 +143,8 @@ class Card(models.Model):
     def get_json(self, level, geometry) -> str:
         j = {
             "ID": self.cardUID,
-            "Idol": self.idol.name,
-            "Group": self.group.name,
-            "Era": self.era.name,
+            "CardDescription" : f"> {self.group.emoji} **{self.cardUID}** {Rarity.get_by_index(level).emoji}\n" +
+            f"> {self.era.name}✦`{self.idol.name}`",
             "url": self.get_image(level, geometry),
             "rarity_id": level,
         }
@@ -154,9 +153,8 @@ class Card(models.Model):
     def get_org_json(self, level) -> str:
         j = {
             "ID": self.cardUID,
-            "Idol": self.idol.name,
-            "Group": self.group.name,
-            "Era": self.era.name,
+            "CardDescription" : f"> {self.group.emoji} **{self.cardUID}** {Rarity.get_by_index(level).emoji}\n" +
+            f"> {self.era.name}✦`{self.idol.name}`",
             "url": self.get_org_image(level),
             "rarity_id": level,
         }
