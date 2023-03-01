@@ -12,6 +12,7 @@ urlpatterns = [
     path("weekly/<int:id>/<path:group>", views.weekly, name="Weekly"),
     path("epicdrop/<int:id>", views.epicdrop, name="EpicDrop"),
     path("addcard/<int:id>/<cardid>/<int:rarity>", views.addcard, name="AddCard"),
+    path("checkduplicate/<int:id>/<cardid>/", views.checkduplicate, name="CheckDuplicate"),
     path(
         "checkcard/<int:id>/<cardid>",
         views.check_having_cards,

@@ -108,11 +108,17 @@ def check_having_cards(request, id, cardid):
 def addcard(request, id, cardid, rarity):
     user = get_object_or_404(Player, userID=id)
     card = get_object_or_404(Card, cardUID=cardid)
+    content = Inventory.objects.filter(user=user, card=card).exists()
     xp = Rarity.get_by_index(rarity).level * XP_PER_LEVEL
     inv = Inventory.objects.create(user=user, card=card, xp=xp)
     if inv:
-        return HttpResponse(content="Success")
+        return HttpResponse(content=content)
 
+def checkduplicate(request, id, cardid):
+    user = get_object_or_404(Player, userID=id)
+    card = get_object_or_404(Card, cardUID=cardid)
+    content = Inventory.objects.filter(user=user, card=card).exists()
+    return HttpResponse(content=content)
 
 def change_balance(request, id, amount):
     user = get_object_or_404(Player, userID=id)
