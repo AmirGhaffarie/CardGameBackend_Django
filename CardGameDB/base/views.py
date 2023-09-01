@@ -133,7 +133,7 @@ def change_balance(request, id, amount):
 def viewcard(request, userid, cardid):
     user = get_object_or_404(Player, userID=userid)
     inv = get_object_or_404(Inventory, user=user, cardUID=cardid)
-    card = inv.get_card()
+    card = inv.get_view_json()
     return HttpResponse(content=card)
 
 

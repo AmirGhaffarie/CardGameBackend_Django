@@ -1,6 +1,5 @@
 import random
 from django.db import models
-from django.core.validators import validate_comma_separated_integer_list
 from datetime import timedelta, datetime, timezone
 from CardGameTestDB.game_configs import *
 import json
@@ -144,20 +143,9 @@ class Card(models.Model):
         ls_emoji = get_emoji("GENERIC_LINESTART")
         j = {
             "ID": self.cardUID,
-            "CardDescription": f"> {ls_emoji} {Rarity.get_by_index(level).emoji}**{self.get_id()}**\n> "
+            "CardDescription": f"> {ls_emoji} {Rarity.get_by_index(level).emoji} **{self.get_id()}**\n> "
             + f"{ls_emoji} {self.era.name} ✦ `{self.idol.name}`",
             "url": self.get_image(level, geometry),
-            "rarity_id": level,
-        }
-        return json.dumps(j)
-
-    def get_org_json(self, level) -> str:
-        ls_emoji = get_emoji("GENERIC_LINESTART")
-        j = {
-            "ID": self.cardUID,
-            "CardDescription": f"> {ls_emoji} {Rarity.get_by_index(level).emoji}**{self.get_id()}**\n> "
-            + f"{ls_emoji} {self.era.name} ✦ `{self.idol.name}`",
-            "url": self.get_org_image(level),
             "rarity_id": level,
         }
         return json.dumps(j)
@@ -197,9 +185,37 @@ class Inventory(models.Model):
         part3 = f" {card.idol.name} [{card.era.name}] **LV{level}**"
         return part1 + part2 + part3
 
-    def get_card(self) -> str:
+    def get_view_json(self) -> str:
         rarity = Rarity.get_from_xp(self.xp)
-        return self.card.get_org_json(rarity.get_index())
+        level = rarity.get_index()
+        c_emoji = get_emoji("GENERIC_CARDS")
+        np_emoji = ":notepad_spiral:"
+        ls_emoji = get_emoji("GENERIC_LINESTART")
+
+        cardDesc = f"{np_emoji} {self.cardUID} \n"
+        cardDesc += f"> {c_emoji} **CARD INFO** \n"
+        cardDesc += f"> {ls_emoji} **Owner**: <@{self.user.userID}> \n"
+        cardDesc += f"> {ls_emoji} **Type**: {rarity.emoji} [LV.{self.get_level()}] \n"
+        card = self.card
+        cardDesc += f"> {ls_emoji} **Group**: {card.group.name} \n"
+        cardDesc += f"> {ls_emoji} **Era**: {card.era.name} \n"
+        cardDesc += f"> {ls_emoji} **Idol**: `{card.idol.name}`"
+        
+
+        j = {
+            "ID": self.cardUID,
+            "CardDescription": cardDesc,
+            "url": self.get_org_image(level),
+            "rarity_id": level,
+        }
+        return json.dumps(j)
+
+    def get_rarity(self):
+        return Rarity.get_from_xp(self.xp)
+    
+    def get_level(self):
+        rarity = self.get_rarity()
+        return self.xp // XP_PER_LEVEL - rarity.level + 1
 
     def __str__(self) -> str:
         return f"{self.user}({self.cardUID})"
