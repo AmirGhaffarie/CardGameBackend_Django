@@ -11,7 +11,7 @@ class CommonEmojis(models.Model):
         self.name = self.name.upper()
         super().save(*args, **kwargs)
 
-    def get_emoji(self, name) -> str:
+    def get_emoji(name) -> str:
         return CommonEmojis.objects.filter(name=name).first().emoji
 
     def __str__(self) -> str:

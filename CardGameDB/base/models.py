@@ -144,7 +144,7 @@ class Card(models.Model):
         ls_emoji = get_emoji("GENERIC_LINESTART")
         j = {
             "ID": self.cardUID,
-            "CardDescription": f"{ls_emoji} {Rarity.get_by_index(level).emoji}**{self.cardUID}**\n"
+            "CardDescription": f">{ls_emoji} {Rarity.get_by_index(level).emoji}**{self.cardUID}**\n>"
             + f"{ls_emoji} {self.era.name} ✦ `{self.idol.name}`",
             "url": self.get_image(level, geometry),
             "rarity_id": level,
@@ -152,10 +152,11 @@ class Card(models.Model):
         return json.dumps(j)
 
     def get_org_json(self, level) -> str:
+        ls_emoji = get_emoji("GENERIC_LINESTART")
         j = {
             "ID": self.cardUID,
-            "CardDescription": f"> {self.group.emoji} **{self.cardUID}** {Rarity.get_by_index(level).emoji}\n"
-            + f"> {self.era.name} ✦ `{self.idol.name}`",
+            "CardDescription": f">{ls_emoji} {Rarity.get_by_index(level).emoji}**{self.cardUID}**\n>"
+            + f"{ls_emoji} {self.era.name} ✦ `{self.idol.name}`",
             "url": self.get_org_image(level),
             "rarity_id": level,
         }
