@@ -144,7 +144,7 @@ class Card(models.Model):
         ls_emoji = get_emoji("GENERIC_LINESTART")
         j = {
             "ID": self.cardUID,
-            "CardDescription": f"> {ls_emoji} {Rarity.get_by_index(level).emoji}**{self.cardUID}**\n> "
+            "CardDescription": f"> {ls_emoji} {Rarity.get_by_index(level).emoji}**{self.get_id()}**\n> "
             + f"{ls_emoji} {self.era.name} ✦ `{self.idol.name}`",
             "url": self.get_image(level, geometry),
             "rarity_id": level,
@@ -155,21 +155,23 @@ class Card(models.Model):
         ls_emoji = get_emoji("GENERIC_LINESTART")
         j = {
             "ID": self.cardUID,
-            "CardDescription": f"> {ls_emoji} {Rarity.get_by_index(level).emoji}**{self.cardUID}**\n> "
+            "CardDescription": f"> {ls_emoji} {Rarity.get_by_index(level).emoji}**{self.get_id()}**\n> "
             + f"{ls_emoji} {self.era.name} ✦ `{self.idol.name}`",
             "url": self.get_org_image(level),
             "rarity_id": level,
         }
         return json.dumps(j)
 
+    def get_id(self):
+        return self.cardUID + str(self.current_index + 1)
+
     def save(self, *args, **kwargs) -> None:
-        if not self.pk:
-            self.cardUID = self.generate_id()
+        self.cardUID = self.generate_id()
         super().save(*args, **kwargs)
         self.refresh_from_db()
 
     def generate_id(self) -> str:
-        return f"{self.group.short}{self.era.short}{self.idol.short}T"
+        return f"{self.group.short}{self.era.short}{self.idol.short}K"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
