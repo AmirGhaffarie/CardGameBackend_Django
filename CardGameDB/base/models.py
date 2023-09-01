@@ -141,10 +141,11 @@ class Card(models.Model):
         }[level]
 
     def get_json(self, level, geometry) -> str:
+        ls_emoji = get_emoji("GENERIC_LINESTART")
         j = {
             "ID": self.cardUID,
-            "CardDescription" : f"> {self.group.emoji} **{self.cardUID}** {Rarity.get_by_index(level).emoji}\n" +
-            f"> {self.era.name} ✦ `{self.idol.name}`",
+            "CardDescription": f"{ls_emoji} {Rarity.get_by_index(level).emoji}**{self.cardUID}**\n"
+            + f"{ls_emoji} {self.era.name} ✦ `{self.idol.name}`",
             "url": self.get_image(level, geometry),
             "rarity_id": level,
         }
@@ -153,8 +154,8 @@ class Card(models.Model):
     def get_org_json(self, level) -> str:
         j = {
             "ID": self.cardUID,
-            "CardDescription" : f"> {self.group.emoji} **{self.cardUID}** {Rarity.get_by_index(level).emoji}\n" +
-            f"> {self.era.name} ✦ `{self.idol.name}`",
+            "CardDescription": f"> {self.group.emoji} **{self.cardUID}** {Rarity.get_by_index(level).emoji}\n"
+            + f"> {self.era.name} ✦ `{self.idol.name}`",
             "url": self.get_org_image(level),
             "rarity_id": level,
         }
@@ -250,3 +251,7 @@ class Cooldowns(models.Model):
 
     def __str__(self) -> str:
         return str(self.user)
+
+
+def get_emoji(name) -> str:
+    return config_models.CommonEmojis.get_emoji(name)
