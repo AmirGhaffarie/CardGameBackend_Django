@@ -203,9 +203,9 @@ class Inventory(models.Model):
         
 
         j = {
-            "ID": self.cardUID,
+            "ID": card.cardUID,
             "CardDescription": cardDesc,
-            "url": self.get_org_image(level),
+            "url": card.get_org_image(level),
             "rarity_id": level,
         }
         return json.dumps(j)
