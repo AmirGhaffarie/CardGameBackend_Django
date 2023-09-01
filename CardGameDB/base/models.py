@@ -189,7 +189,7 @@ class Inventory(models.Model):
         rarity = Rarity.get_from_xp(self.xp)
         level = rarity.get_index()
         c_emoji = get_emoji("GENERIC_CARDS")
-        np_emoji = ":notepad_spiral:"
+        np_emoji = get_emoji("GENERIC_NOTE")
         ls_emoji = get_emoji("GENERIC_LINESTART")
 
         cardDesc = f"{np_emoji} {self.cardUID} \n"
@@ -200,7 +200,6 @@ class Inventory(models.Model):
         cardDesc += f"> {ls_emoji} **Group**: {card.group.name} \n"
         cardDesc += f"> {ls_emoji} **Era**: {card.era.name} \n"
         cardDesc += f"> {ls_emoji} **Idol**: `{card.idol.name}`"
-        
 
         j = {
             "ID": card.cardUID,
@@ -212,7 +211,7 @@ class Inventory(models.Model):
 
     def get_rarity(self):
         return Rarity.get_from_xp(self.xp)
-    
+
     def get_level(self):
         rarity = self.get_rarity()
         return self.xp // XP_PER_LEVEL - rarity.level + 1
