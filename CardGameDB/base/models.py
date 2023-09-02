@@ -239,7 +239,7 @@ class Cooldowns(models.Model):
     lastClaim = models.DateTimeField(default=datetime.min)
 
     def gacha_remaining_time(self) -> timedelta:
-        return self.get_remaining("GACHA", self.lastDrop)
+        return self.get_remaining("DROP", self.lastDrop)
 
     def lucky_remaining_time(self) -> timedelta:
         return self.get_remaining("LUCKY", self.lastEpicDrop)
@@ -255,7 +255,7 @@ class Cooldowns(models.Model):
 
     def get_all_cooldowns(self) -> str:
         result = {
-            "Gacha": str(self.gacha_remaining_time()),
+            "Drop": str(self.gacha_remaining_time()),
             "Lucky": str(self.lucky_remaining_time()),
             "Daily": str(self.daily_remaining_time()),
             "Weekly": str(self.weekly_remaining_time()),
