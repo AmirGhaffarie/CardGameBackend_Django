@@ -139,10 +139,18 @@ class Card(models.Model):
     def get_json(self, level, geometry) -> str:
         card_emoji = get_emoji("GENERIC_CARDS")
         arrow_emoji = get_emoji("GENERIC_RIGHTARROW")
+        ls_emoji = get_emoji("GENERIC_LINESTART")
+
+    
+        cardDesc = f"{card_emoji} **{self.cardUID}**:\n"
+        cardDesc += f"{arrow_emoji} **{self.group.name}**\n"
+        cardDesc += f"> {ls_emoji} **Era**: `{self.era.name}` \n"
+        cardDesc += f"> {ls_emoji} **Idol**: `{self.idol.name}` \n"
+        cardDesc += f"> {ls_emoji} **Type**: {Rarity.get_by_index(level).emoji}"
+
         j = {
             "ID": self.cardUID,
-            "CardDescription": f"> {card_emoji} **{self.get_id()}**:\n> "
-            + f"{arrow_emoji} | `{self.era.name}` | `{self.idol.name}`",
+            "CardDescription": cardDesc,
             "url": self.get_image(level, geometry),
             "rarity_id": level,
         }
@@ -187,9 +195,8 @@ class Inventory(models.Model):
         cardDesc = f"{np_emoji} **{self.cardUID}** \n"
         cardDesc += f"> {c_emoji} **CARD INFO**: \n"
         cardDesc += f"> {ls_emoji} **Owner**: <@{self.user.userID}> \n"
-        cardDesc += (
-            f"> {ls_emoji} **Type**: {rarity.emoji} `[LV.{self.get_level()}]` \n"
-        )
+        cardDesc += f"> {ls_emoji} **Type**: {rarity.emoji}\n"
+        
         card = self.card
         cardDesc += f"> {ls_emoji} **Group**: `{card.group.name}` \n"
         cardDesc += f"> {ls_emoji} **Era**: `{card.era.name}` \n"
