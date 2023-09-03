@@ -66,9 +66,6 @@ class Rarity(models.Model):
 class Group(models.Model):
     name = models.CharField(verbose_name="GroupName", max_length=64)
     short = models.CharField(verbose_name="ShortName", default="", max_length=8)
-    emoji = models.CharField(
-        verbose_name="Emoji", blank=True, default="", max_length=64
-    )
 
     def save(self, *args, **kwargs) -> None:
         self.short = self.short.upper()
@@ -140,11 +137,12 @@ class Card(models.Model):
         }[level]
 
     def get_json(self, level, geometry) -> str:
-        ls_emoji = get_emoji("GENERIC_LINESTART")
+        card_emoji = get_emoji("GENERIC_CARDS")
+        arrow_emoji = get_emoji("GENERIC_RIGHTARROW")
         j = {
             "ID": self.cardUID,
-            "CardDescription": f"> {ls_emoji} {Rarity.get_by_index(level).emoji} **{self.get_id()}**\n> "
-            + f"{ls_emoji} {self.era.name} ✦ `{self.idol.name}`",
+            "CardDescription": f"> {card_emoji} **{self.get_id()}**:\n> "
+            + f"{arrow_emoji} | `{self.era.name}` | `{self.idol.name}`",
             "url": self.get_image(level, geometry),
             "rarity_id": level,
         }
@@ -176,14 +174,8 @@ class Inventory(models.Model):
 
     def get_info(self) -> str:
         card: Card = self.card
-
         rarity = Rarity.get_from_xp(self.xp)
-        level = self.xp // XP_PER_LEVEL - rarity.level + 1
-
-        part1 = f"{rarity.emoji} {self.cardUID}"
-        part2 = f" {card.group.emoji} — **{card.group.name}**"
-        part3 = f" {card.idol.name} [{card.era.name}] **LV{level}**"
-        return part1 + part2 + part3
+        return  f"> {rarity.emoji} `{self.cardUID}` | `{self.card.idol.name}`" 
 
     def get_view_json(self) -> str:
         rarity = Rarity.get_from_xp(self.xp)
@@ -192,13 +184,15 @@ class Inventory(models.Model):
         np_emoji = get_emoji("GENERIC_NOTE")
         ls_emoji = get_emoji("GENERIC_LINESTART")
 
-        cardDesc = f"{np_emoji} {self.cardUID} \n"
-        cardDesc += f"> {c_emoji} **CARD INFO** \n"
+        cardDesc = f"{np_emoji} **{self.cardUID}** \n"
+        cardDesc += f"> {c_emoji} **CARD INFO**: \n"
         cardDesc += f"> {ls_emoji} **Owner**: <@{self.user.userID}> \n"
-        cardDesc += f"> {ls_emoji} **Type**: {rarity.emoji} [LV.{self.get_level()}] \n"
+        cardDesc += (
+            f"> {ls_emoji} **Type**: {rarity.emoji} `[LV.{self.get_level()}]` \n"
+        )
         card = self.card
-        cardDesc += f"> {ls_emoji} **Group**: {card.group.name} \n"
-        cardDesc += f"> {ls_emoji} **Era**: {card.era.name} \n"
+        cardDesc += f"> {ls_emoji} **Group**: `{card.group.name}` \n"
+        cardDesc += f"> {ls_emoji} **Era**: `{card.era.name}` \n"
         cardDesc += f"> {ls_emoji} **Idol**: `{card.idol.name}`"
 
         j = {
