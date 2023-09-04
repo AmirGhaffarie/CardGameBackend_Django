@@ -183,7 +183,7 @@ class Inventory(models.Model):
     def get_info(self) -> str:
         card: Card = self.card
         rarity = Rarity.get_from_xp(self.xp)
-        return  f"> {rarity.emoji} `{self.cardUID}` | `{self.card.idol.name}`" 
+        return  f"{self.card.group.name}\n{self.card.era.name}\n> {rarity.emoji} `{self.cardUID}` | `{self.card.idol.name}`" 
 
     def get_view_json(self) -> str:
         rarity = Rarity.get_from_xp(self.xp)
