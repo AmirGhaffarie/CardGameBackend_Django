@@ -130,9 +130,8 @@ def change_balance(request, id, amount):
         return HttpResponse(status=210, content="Not enough money")
 
 
-def viewcard(request, userid, cardid):
-    user = get_object_or_404(Player, userID=userid)
-    inv = get_object_or_404(Inventory, user=user, cardUID=cardid)
+def viewcard(request, cardid):
+    inv = get_object_or_404(Inventory, cardUID=cardid)
     card = inv.get_view_json()
     return HttpResponse(content=card)
 
