@@ -30,6 +30,6 @@ urlpatterns = [
     ),
     path("balance/<int:id>/", views.balance, name="Balance"),
     path("inventory/<int:id>", views.InventoryView.as_view(), name="Inventory"),
-    path("viewcard/<int:userid>/<cardid>", views.viewcard, name="View"),
+    path("viewcard/<cardid>", views.viewcard, name="View"),
     path("fuse/<int:userid>/<main_card>/<feed_card>", views.fuse, name="Fuse")
 ]
