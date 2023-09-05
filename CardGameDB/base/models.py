@@ -142,7 +142,7 @@ class Card(models.Model):
         ls_emoji = get_emoji("GENERIC_LINESTART")
 
     
-        cardDesc = f"{card_emoji} **{self.cardUID}**:\n"
+        cardDesc = f"{card_emoji} **{self.get_id()}**:\n"
         cardDesc += f"{arrow_emoji} **{self.group.name}**\n"
         cardDesc += f"> {ls_emoji} **Era**: `{self.era.name}` \n"
         cardDesc += f"> {ls_emoji} **Idol**: `{self.idol.name}` \n"
