@@ -1,7 +1,8 @@
 from django.db import models
-from datetime import timedelta, datetime, timezone
+from datetime import timedelta
 
-class CommonEmojis(models.Model):
+
+class Emoji(models.Model):
     name = models.CharField(verbose_name="Name", unique=True, max_length=64)
     emoji = models.CharField(
         verbose_name="Emoji", blank=True, default="", max_length=64
@@ -11,13 +12,15 @@ class CommonEmojis(models.Model):
         self.name = self.name.upper()
         super().save(*args, **kwargs)
 
-    def get_emoji(name) -> str:
-        return CommonEmojis.objects.filter(name=name).first().emoji
+    @staticmethod
+    def get(name) -> str:
+        return Emoji.objects.filter(name=name).first().emoji
 
     def __str__(self) -> str:
         return f"{self.name} : {self.emoji}"
 
-class Cooldowns(models.Model):
+
+class Cooldown(models.Model):
     name = models.CharField(verbose_name="Name", unique=True, max_length=64)
     duration = models.DurationField(verbose_name="Duration", default=timedelta(0))
 

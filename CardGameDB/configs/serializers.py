@@ -1,8 +1,8 @@
-from .models import CommonEmojis
+from .models import Emoji
 from rest_framework.serializers import ModelSerializer
 
 
 class CommonEmojisSerializer(ModelSerializer):
     class Meta:
-        model = CommonEmojis
+        model = Emoji
         fields = ["name", "emoji"]

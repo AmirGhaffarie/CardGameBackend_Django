@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("base", "0014_delete_commonemojis"),
+        ("base", "0012_remove_card_image6_remove_card_image7_and_more")
     ]
 
     operations = [

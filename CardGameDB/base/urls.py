@@ -10,9 +10,9 @@ urlpatterns = [
     path("drop/<int:id>", views.drop, name="Drop"),
     path("daily/<int:id>", views.daily, name="Daily"),
     path("weekly/<int:id>/<path:group>", views.weekly, name="Weekly"),
-    path("epicdrop/<int:id>", views.epicdrop, name="EpicDrop"),
-    path("addcard/<int:id>/<cardid>/<int:rarity>", views.addcard, name="AddCard"),
-    path("checkduplicate/<int:id>/<cardid>", views.checkduplicate, name="CheckDuplicate"),
+    path("epicdrop/<int:id>", views.epic_drop, name="EpicDrop"),
+    path("addcard/<int:id>/<cardid>", views.add_card, name="AddCard"),
+    path("checkduplicate/<int:id>/<cardid>", views.check_duplicate, name="CheckDuplicate"),
     path(
         "checkcard/<int:id>/<cardid>",
         views.check_having_cards,
@@ -30,6 +30,5 @@ urlpatterns = [
     ),
     path("balance/<int:id>/", views.balance, name="Balance"),
     path("inventory/<int:id>", views.InventoryView.as_view(), name="Inventory"),
-    path("viewcard/<cardid>", views.viewcard, name="View"),
-    path("fuse/<int:userid>/<main_card>/<feed_card>", views.fuse, name="Fuse")
+    path("viewcard/<cardid>", views.view_card, name="View")
 ]
