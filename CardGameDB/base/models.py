@@ -13,8 +13,8 @@ class Player(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         super().save(*args, **kwargs)
-        if not Cooldowns.objects.filter(user=self).exists():
-            Cooldowns.objects.create(user=self)
+        if not Cooldown.objects.filter(user=self).exists():
+            Cooldown.objects.create(user=self)
 
     def __str__(self) -> str:
         return str(self.userID)
@@ -30,11 +30,11 @@ class Rarity(models.Model):
         max_chance = 0
         rarities = Rarity.objects.all()
         for rarity in rarities:
-            if Card.objects.exists(rarity=rarity):
+            if Card.objects.filter(rarity=rarity).exists():
                 max_chance += rarity.chance
         rand = random.randint(0, max_chance)
         for rarity in rarities:
-            if Card.objects.exists(rarity=rarity):
+            if Card.objects.filter(rarity=rarity).exists():
                 if rand < rarity.chance:
                     return rarity
                 else:
