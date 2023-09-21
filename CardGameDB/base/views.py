@@ -137,7 +137,7 @@ def view_card(request, card_id):
 
 
 class InventoryView(ListAPIView):
-    def get(self, request, id, format):
+    def get(self, request, id):
         res = Inventory.objects.filter(user=id).order_by("card__group__name")
         paginator = InventoryPaginaiton()
         pag = paginator.paginate_queryset(res, request)
