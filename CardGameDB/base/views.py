@@ -138,7 +138,13 @@ def view_card(request, card_id):
 
 class InventoryView(ListAPIView):
     def get(self, request, id):
-        res = Inventory.objects.filter(user=id).order_by("card__group__name")
+        res = (Inventory.objects.filter(user=id).order_by("card__group__name"))
+        if 'group' in request.GET:
+            res = res.filter(card__group__name=request.GET.get('group'))
+        if 'era' in request.GET:
+            res = res.filter(card__era__name=request.GET.get('era'))
+        if 'idol' in request.GET:
+            res = res.filter(card__idol__name=request.GET.get('idol'))
         paginator = InventoryPaginaiton()
         pag = paginator.paginate_queryset(res, request)
         invs = InventorySerializer(pag, many=True)
