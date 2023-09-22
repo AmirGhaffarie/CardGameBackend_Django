@@ -156,7 +156,6 @@ class Inventory(models.Model):
     user = models.ForeignKey(Player, on_delete=models.CASCADE)
     card = models.ForeignKey(Card, on_delete=models.CASCADE)
 
-
     def get_info(self) -> str:
         card: Card = self.card
         return (f"{self.card.group.name}\n{self.card.era.name}\n>"
