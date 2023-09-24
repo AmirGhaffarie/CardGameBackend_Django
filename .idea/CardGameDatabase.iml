@@ -16,6 +16,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/CardGameDB/base/models" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CardGameDB/configs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CardGameDB/base" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludePattern pattern=".vscode*" />
     </content>
