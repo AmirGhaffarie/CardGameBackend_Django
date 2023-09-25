@@ -165,7 +165,7 @@ class Inventory(models.Model):
         card = self.card
         j = {
             "ID": card.cardUID,
-            "card_id": card.cardUID,
+            "card_id": self.cardUID,
             "owner": f"<@{self.user.userID}>",
             "type": card.rarity.emoji,
             "group": card.group.name,
