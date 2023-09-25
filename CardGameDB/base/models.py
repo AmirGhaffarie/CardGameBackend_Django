@@ -162,23 +162,15 @@ class Inventory(models.Model):
                 f" {card.rarity.emoji} `{self.cardUID}` | `{self.card.idol.name}`")
 
     def get_view_json(self) -> str:
-        c_emoji = get_emoji("GENERIC_CARDS")
-        np_emoji = get_emoji("GENERIC_NOTE")
-        ls_emoji = get_emoji("GENERIC_LINESTART")
         card = self.card
-
-        card_desc = f"{np_emoji} **{self.cardUID}** \n"
-        card_desc += f"> {c_emoji} **CARD INFO**: \n"
-        card_desc += f"> {ls_emoji} **Owner**: <@{self.user.userID}> \n"
-        card_desc += f"> {ls_emoji} **Type**: {card.rarity.emoji}\n"
-
-        card_desc += f"> {ls_emoji} **Group**: `{card.group.name}` \n"
-        card_desc += f"> {ls_emoji} **Era**: `{card.era.name}` \n"
-        card_desc += f"> {ls_emoji} **Idol**: `{card.idol.name}`"
-
         j = {
             "ID": card.cardUID,
-            "CardDescription": card_desc,
+            "card_id": card.cardUID,
+            "owner": f"<@{self.user.userID}>",
+            "type": card.rarity.emoji,
+            "group": card.group.name,
+            "era": card.era.name,
+            "idol": card.idol.name,
             "url": card.get_org_image(),
         }
         return json.dumps(j)

@@ -2,6 +2,24 @@ from django.db import models
 from datetime import timedelta
 
 
+class Embed(models.Model):
+    name = models.CharField(verbose_name="Name", unique=True, max_length=64)
+    embed = models.TextField(
+        verbose_name="Embed", blank=True, default=""
+    )
+
+    def save(self, *args, **kwargs) -> None:
+        self.name = self.name.upper()
+        super().save(*args, **kwargs)
+
+    @staticmethod
+    def get(name) -> str:
+        return Embed.objects.filter(name=name).first().emoji
+
+    def __str__(self) -> str:
+        return f"{self.name} : {self.embed[:5]}..."
+
+
 class Emoji(models.Model):
     name = models.CharField(verbose_name="Name", unique=True, max_length=64)
     emoji = models.CharField(
