@@ -113,7 +113,7 @@ class Card(models.Model):
         return get_thumbnail(file, geometry, format="PNG").url
 
     def get_org_image(self) -> str:
-        return  self.image.url if self.image else None
+        return self.image.url if self.image else None
 
     def get_json(self, geometry) -> str:
         card_emoji = get_emoji("GENERIC_CARDS")
@@ -129,6 +129,11 @@ class Card(models.Model):
         j = {
             "ID": self.cardUID,
             "CardDescription": card_desc,
+            "card_id": self.get_id(),
+            "group": self.group.name,
+            "era": self.era.name,
+            "idol": self.idol.name,
+            "rarity": self.rarity.emoji,
             "url": self.get_image(geometry),
         }
         return json.dumps(j)
