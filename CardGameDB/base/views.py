@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
-from .models import Group, Card, Cooldown, Inventory, Player, PlayerEraCount
+from .models import Group, Card, Cooldown, Inventory, Player, PlayerEraCount, Era
 from .paginations import InventoryPaginaiton
 from .serializers import InventorySerializer
 from rest_framework.generics import ListAPIView
@@ -156,11 +156,16 @@ class InventoryView(ListAPIView):
 
 
 def era_count(request, id, era):
-    pec, created = PlayerEraCount.objects.get_or_create(user_id=id, era_name=era)
+    q = Era.objects.filter(name=era)
+    if not q.exists():
+        return 0
+    found_era = q.first()
+    pec, created = PlayerEraCount.objects.get_or_create(user_id=id, era=found_era)
     if created:
         pec.count = Inventory.objects.filter(user_id=id, card__era=era).count()
         pec.save()
     return pec.count
+
 
 # utils
 def get_random_card(geometry):
