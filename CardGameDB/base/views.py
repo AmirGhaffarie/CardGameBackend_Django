@@ -162,7 +162,7 @@ def era_count(request, id, era):
     found_era = q.first()
     pec, created = PlayerEraCount.objects.get_or_create(user_id=id, era=found_era)
     if created:
-        pec.count = Inventory.objects.filter(user_id=id, card__era=era).count()
+        pec.count = Inventory.objects.filter(user_id=id, card__era=found_era).count()
         pec.save()
     return pec.count
 
