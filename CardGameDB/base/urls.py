@@ -1,5 +1,5 @@
 from django.urls import register_converter, path
-from . import views, converters
+from . import views, converters, admin
 
 register_converter(converters.SignedInt, "signedint")
 
@@ -31,4 +31,5 @@ urlpatterns = [
     path("balance/<int:id>/", views.balance, name="Balance"),
     path("inventory/<int:id>", views.InventoryView.as_view(), name="Inventory"),
     path("viewcard/<card_id>", views.view_card, name="View"),
+    path("eracount/<int:id>/<era>", views.era_count, name="Era Count")
 ]

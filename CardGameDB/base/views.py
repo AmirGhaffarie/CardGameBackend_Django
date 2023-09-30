@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
-from .models import Group, Card, Cooldown, Inventory, Player
+from .models import Group, Card, Cooldown, Inventory, Player, PlayerEraCount
 from .paginations import InventoryPaginaiton
 from .serializers import InventorySerializer
 from rest_framework.generics import ListAPIView
@@ -110,6 +110,9 @@ def add_card(request, id, card_id):
     content = Inventory.objects.filter(user=user, card=card).exists()
     inv = Inventory.objects.create(user=user, card=card)
     inv.save()
+    pec, exist = PlayerEraCount.objects.get_or_create(user=user, card=card)
+    pec.count = Inventory.objects.filter(user=user, card__era=card.era).count()
+    pec.save()
     return HttpResponse(content=content)
 
 
@@ -152,6 +155,13 @@ class InventoryView(ListAPIView):
         return pag
 
 
+def era_count(request, id, era):
+    pec, created = PlayerEraCount.objects.get_or_create(user_id=id, era_name=era)
+    if created:
+        pec.count = Inventory.objects.filter(user_id=id, card__era=era).count()
+        pec.save()
+    return pec.count
+
 # utils
 def get_random_card(geometry):
     item: Card = Card.get_random()
@@ -161,3 +171,5 @@ def get_random_card(geometry):
 def get_random_group_card(group, geometry):
     item: Card = Card.get_random_from_group(group)
     return item.get_json(geometry)
+
+

@@ -194,6 +194,12 @@ class Inventory(models.Model):
         super().save(*args, **kwargs)
 
 
+class PlayerEraCount(models.Model):
+    user = models.ForeignKey(Player, on_delete=models.CASCADE)
+    era = models.ForeignKey(Era, on_delete=models.CASCADE)
+    count = models.IntegerField(default=0, editable=False)
+
+
 class Cooldown(models.Model):
     user = models.OneToOneField(Player, primary_key=True, on_delete=models.CASCADE)
     lastDrop = models.DateTimeField(default=datetime.min)
