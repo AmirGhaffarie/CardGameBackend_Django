@@ -110,7 +110,7 @@ def add_card(request, id, card_id):
     content = Inventory.objects.filter(user=user, card=card).exists()
     inv = Inventory.objects.create(user=user, card=card)
     inv.save()
-    pec, exist = PlayerEraCount.objects.get_or_create(user=user, card=card)
+    pec, exist = PlayerEraCount.objects.get_or_create(user=user, era=card.era)
     pec.count = Inventory.objects.filter(user=user, card__era=card.era).count()
     pec.save()
     return HttpResponse(content=content)
