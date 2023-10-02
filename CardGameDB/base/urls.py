@@ -30,6 +30,6 @@ urlpatterns = [
     ),
     path("balance/<int:id>/", views.balance, name="Balance"),
     path("inventory/<int:id>", views.InventoryView.as_view(), name="Inventory"),
-    path("viewcard/<card_id>", views.view_card, name="View"),
+    path("viewcard/<path:card_id>", views.view_card, name="View"),
     path("eracount/<int:id>/<path:era>", views.era_count, name="Era Count")
 ]
