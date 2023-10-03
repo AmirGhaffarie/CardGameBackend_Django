@@ -133,7 +133,7 @@ class Card(models.Model):
             "group": self.group.name,
             "era": self.era.name,
             "idol": self.idol.name,
-            "rarity": self.rarity.emoji,
+            "type": self.rarity.emoji,
             "url": self.get_image(geometry),
         }
         return json.dumps(j)
