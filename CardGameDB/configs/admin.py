@@ -6,3 +6,4 @@ from configs.models import *
 admin.site.register(Embed)
 admin.site.register(Emoji)
 admin.site.register(Cooldown)
+admin.site.register(DiscoverItem)
