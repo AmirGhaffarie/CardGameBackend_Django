@@ -1,4 +1,4 @@
-from .models import Emoji, Embed
+from .models import Emoji, Embed, DiscoverItem
 from rest_framework.serializers import ModelSerializer
 
 
@@ -12,3 +12,9 @@ class EmbedSerializer(ModelSerializer):
     class Meta:
         model = Embed
         fields = ["name", "embed"]
+
+
+class DiscoverSerializer(ModelSerializer):
+    class Meta:
+        model = DiscoverItem
+        fields = ["name", "chance", "amount", "description"]

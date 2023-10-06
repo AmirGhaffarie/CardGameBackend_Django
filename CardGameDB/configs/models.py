@@ -48,3 +48,17 @@ class Cooldown(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} : {self.duration}"
+
+
+class DiscoverItem(models.Model):
+    name = models.CharField(verbose_name="Name", unique=True, max_length=64)
+    chance = models.PositiveIntegerField(verbose_name="Chance")
+    amount = models.PositiveIntegerField(verbose_name="Amount")
+    description = models.TextField(verbose_name="Description")
+
+    def save(self, *args, **kwargs) -> None:
+        self.name = self.name.upper()
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
