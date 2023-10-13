@@ -61,14 +61,17 @@ def weekly(request, id, group):
     if cooldown.total_seconds() > 0:
         return HttpResponse(status=210, content=str(cooldown))
     elif Group.objects.filter(name=group).exists():
-        cd.lastWeekly = datetime.now(timezone.utc)
-        cd.save()
-        recs = []
-        dic = {}
-        for i in range(0, 2):
-            recs.append(get_random_group_card(group, "300"))
-        dic["res"] = recs
-        return JsonResponse(dic)
+        if Card.objects.filter(group__name=group).count() < 3:
+            return HttpResponse(status=230, content="Group not Available")
+        else:
+            cd.lastWeekly = datetime.now(timezone.utc)
+            cd.save()
+            recs = []
+            dic = {}
+            for i in range(0, 2):
+                recs.append(get_random_group_card(group, "300"))
+            dic["res"] = recs
+            return JsonResponse(dic)
     else:
         return HttpResponse(status=220, content="Group you entered not Exists")
 
