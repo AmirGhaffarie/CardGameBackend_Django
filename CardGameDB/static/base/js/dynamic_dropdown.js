@@ -5,7 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateIdolAndEraOptions() {
         let selectedGroupId = groupField.options[groupField.selectedIndex].value;
-        
+
+        let idol = idolField.value;
+        let era = eraField.value;
+
         // Clear existing options
         while (idolField.firstChild) {
             idolField.removeChild(idolField.firstChild);
@@ -24,8 +27,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     let option = document.createElement('option');
                     option.value = subgroup.id;
                     option.text = subgroup.name;
+
                     idolField.add(option);
                 });
+                if (idol)
+                    idolField.value = idol;
             };
             xhr.send();
 
@@ -39,12 +45,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     option.text = subgroup.name;
                     eraField.add(option);
                 });
+                if(era)
+                    eraField.value = era;
             };
             xhr2.send();
         }
     }
 
-    updateIdolAndEraOptions();
     // Add event listener to the group field
     groupField.addEventListener('change', updateIdolAndEraOptions);
+
+    updateIdolAndEraOptions();
 });
