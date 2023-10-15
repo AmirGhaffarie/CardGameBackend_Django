@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
-from .models import Group, Card, Cooldown, Inventory, Player, PlayerEraCount, Era
+from .models import Group, Card, Cooldown, Inventory, Player, PlayerEraCount, Era, Idol
 from .paginations import InventoryPaginaiton
 from .serializers import InventorySerializer
 from rest_framework.generics import ListAPIView
@@ -181,3 +181,13 @@ def get_random_group_card(group, geometry):
     return item.get_json(geometry)
 
 
+def get_idols(request):
+    group_id = request.GET.get('group_id')
+    subgroups = Idol.objects.filter(group_id=group_id).values('id', 'name')
+    return JsonResponse(list(subgroups), safe=False)
+
+
+def get_eras(request):
+    group_id = request.GET.get('group_id')
+    subgroups = Era.objects.filter(group_id=group_id).values('id', 'name')
+    return JsonResponse(list(subgroups), safe=False)
