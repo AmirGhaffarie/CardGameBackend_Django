@@ -33,6 +33,26 @@ def claim(request, id):
     return HttpResponse(content="Success")
 
 
+def stargaze(request, id):
+    cd = get_object_or_404(Cooldown, user=id)
+    cooldown = cd.sg_remaining_time()
+    if cooldown.total_seconds() > 0:
+        return HttpResponse(status=210, content=str(cooldown))
+    cd.lastStargaze = datetime.now(timezone.utc)
+    cd.save()
+    return HttpResponse(content="Success")
+
+
+def discover(request, id):
+    cd = get_object_or_404(Cooldown, user=id)
+    cooldown = cd.dc_remaining_time()
+    if cooldown.total_seconds() > 0:
+        return HttpResponse(status=210, content=str(cooldown))
+    cd.lastDiscover = datetime.now(timezone.utc)
+    cd.save()
+    return HttpResponse(content="Success")
+
+
 def drop(request, id):
     cd = get_object_or_404(Cooldown, user=id)
     cooldown = cd.gacha_remaining_time()
