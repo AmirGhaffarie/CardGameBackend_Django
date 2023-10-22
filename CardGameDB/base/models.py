@@ -210,6 +210,8 @@ class Cooldown(models.Model):
     lastDaily = models.DateTimeField(default=datetime.min)
     lastWeekly = models.DateTimeField(default=datetime.min)
     lastClaim = models.DateTimeField(default=datetime.min)
+    lastStargaze = models.DateTimeField(default=datetime.min)
+    lastDiscover = models.DateTimeField(default=datetime.min)
 
     def gacha_remaining_time(self) -> timedelta:
         return self.get_remaining("DROP", self.lastDrop)
@@ -226,6 +228,12 @@ class Cooldown(models.Model):
     def claim_remaining_time(self) -> timedelta:
         return self.get_remaining("CLAIM", self.lastClaim)
 
+    def sg_remaining_time(self) -> timedelta:
+        return self.get_remaining("STARGAZE", self.lastStargaze)
+
+    def dc_remaining_time(self) -> timedelta:
+        return self.get_remaining("DISCOVER", self.lastDiscover)
+
     def get_all_cooldowns(self) -> str:
         result = {
             "Drop": str(self.gacha_remaining_time()),
@@ -233,6 +241,8 @@ class Cooldown(models.Model):
             "Daily": str(self.daily_remaining_time()),
             "Weekly": str(self.weekly_remaining_time()),
             "Claim": str(self.claim_remaining_time()),
+            "Stargaze": str(self.claim_remaining_time()),
+            "Discover": str(self.claim_remaining_time()),
         }
         return json.dumps(result)
 
