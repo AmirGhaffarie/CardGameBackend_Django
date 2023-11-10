@@ -1,7 +1,4 @@
 import random
-
-from django.contrib import messages
-from django.core.exceptions import ValidationError
 from django.db import models
 from datetime import timedelta, datetime, timezone
 from configs import *
@@ -11,7 +8,7 @@ from sorl.thumbnail import get_thumbnail
 
 
 class Player(models.Model):
-    userID = models.IntegerField(verbose_name="User Id", primary_key=True)
+    userID = models.BigIntegerField(verbose_name="User Id", primary_key=True)
     carrots = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs) -> None:

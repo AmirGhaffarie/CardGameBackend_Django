@@ -86,8 +86,12 @@ WSGI_APPLICATION = "CardGameTestDB.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "media", "db.sqlite3"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        'USER': 'postgres',
+        'PASSWORD': "Pt05$:'_y4\"#-]n0wj_^|eX^PxpHSY",
+        'HOST': 'host.docker.internal',
+        'PORT': '5432',
     }
 }
 
