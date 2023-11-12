@@ -201,14 +201,15 @@ class PlayerEraCount(models.Model):
 
 
 class Cooldown(models.Model):
+    min_time = datetime.fromisoformat("2000-01-01 01:01:01")
     user = models.OneToOneField(Player, primary_key=True, on_delete=models.CASCADE)
-    lastDrop = models.DateTimeField(default=datetime.min)
-    lastEpicDrop = models.DateTimeField(default=datetime.min)
-    lastDaily = models.DateTimeField(default=datetime.min)
-    lastWeekly = models.DateTimeField(default=datetime.min)
-    lastClaim = models.DateTimeField(default=datetime.min)
-    lastStargaze = models.DateTimeField(default=datetime.min)
-    lastDiscover = models.DateTimeField(default=datetime.min)
+    lastDrop = models.DateTimeField(default=min_time)
+    lastEpicDrop = models.DateTimeField(default=min_time)
+    lastDaily = models.DateTimeField(default=min_time)
+    lastWeekly = models.DateTimeField(default=min_time)
+    lastClaim = models.DateTimeField(default=min_time)
+    lastStargaze = models.DateTimeField(default=min_time)
+    lastDiscover = models.DateTimeField(default=min_time)
 
     def gacha_remaining_time(self) -> timedelta:
         return self.get_remaining("DROP", self.lastDrop)
