@@ -13,7 +13,7 @@ def register(request, id):
     else:
         player = Player(userID=id)
         player.save()
-        return HttpResponse(content="Account registered successfully.")
+        return HttpResponse(status=210, content="Account registered successfully.")
 
 
 def cds(request, id):
